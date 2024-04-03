@@ -58,10 +58,11 @@ jobs:
 
       - name: Check executables
         run: |
-          for file in ${{ vars.EXECUTABLES }}; do
-            if [ ! -x "$file" ]; then
-                echo "File $file does not exist or is not executable"
-                exit 1
+          IFS=',' read -ra EXECS <<< ${{ env.EXECUTABLES }}
+          for exec in "${EXECS[@]}"; do
+            if [ ! -x "$exec" ]; then
+              echo "executable $exec not found"
+              exit 1
             fi
           done
 

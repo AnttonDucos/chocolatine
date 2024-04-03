@@ -52,29 +52,4 @@ int gameoflife(int const argc, char const *const *argv)
     if (life_or_death(arr, time) == ERROR)
         return ERROR;
     return SUCCESS;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 }
