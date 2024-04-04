@@ -57,12 +57,20 @@ jobs:
 
       - name: Check executables
         run: |
-          for file in ${{ vars.EXECUTABLES }}; do
-            if [ ! -x "$file" ]; then
-                echo "File $file does not exist or is not executable"
-                exit 1
+          IFS=',' read -ra EXECS <<< "${{ env.EXECUTABLES }}"
+          for exec in "${EXECS[@]}"; do
+          if [ ! -x "$exec" ]; then
+            echo "::error::Executable $exec not found or not executable"
+            exit 1
+          else
+            $exec --version &> /dev/null
+            if [ $? -ne 0 ]; then
+              echo "::error::Executable $exec failed to run correctly"
+              exit 1
             fi
-          done
+          fi
+  done
+  
   run_tests:
     name: run_tests
     runs-on: ubuntu-latest
