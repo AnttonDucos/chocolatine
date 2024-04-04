@@ -57,14 +57,20 @@ jobs:
         run: make clean
 
       - name: Check executables
-        run: |
-          IFS=',' read -ra EXECS <<< ${{ env.EXECUTABLES }}
-          for exec in "${EXECS[@]}"; do
-            if [ ! -x "$exec" ]; then
-              echo "executable $exec not found"
-              exit 1
-            fi
-          done
+      run: |
+        IFS=',' read -ra EXECS <<< "${{ env.EXECUTABLES }}"
+        for exec in "${EXECS[@]}"; do
+        if [ ! -x "$exec" ]; then
+          echo "::error::Executable $exec not found or not executable"
+          exit 1
+        else
+          $exec --version &> /dev/null
+          if [ $? -ne 0 ]; then
+            echo "::error::Executable $exec failed to run correctly"
+            exit 1
+          fi
+        fi
+        done
 
   run_tests:
     name: run_tests
