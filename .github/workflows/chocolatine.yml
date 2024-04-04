@@ -33,7 +33,7 @@ jobs:
             echo "::error title=${fields[2]} coding style error,file=${fields[0]},line=${fields[1]}::${fields[3]}"
           done < "$input"
           if [ $(cat /tmp/coding-style-reports.log | wc -l) -gt 0 ]; then
-              exit 1
+            exit 1
           fi
 
   check_program_compilation:
